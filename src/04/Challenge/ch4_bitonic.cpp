@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 // is_bitonic()
 // Summary: This function receives an STL vector of integers and returns true if it contains a bitonic sequence, false otherwise.
@@ -20,17 +21,56 @@
 // Returns: A boolean value: True for bitonic sequences, false otherwise.
 bool is_bitonic(const std::vector<int> &v){
     
-    // Write your code here
+    bool success = false;
+    auto first_element = v.at(0);
+    if (std::all_of(v.begin(), v.end(), [first_element](int i){return i == first_element;}))
+    {
+        success = true;
+    }
+    else
+    {
+        //if (v[0] < v[1] && v[1] < v[2] && v[2] < v[3]..etc)
 
-    return false;
+        int highest = 0;
+        for (int i = 0; i < v.size() - 1; i++)
+        {
+            if (v.at(i) < v.at(i + 1))
+            {
+                success = true;
+            }
+            else 
+            {
+                highest = i;
+                success = false;
+                break;
+            }
+        }
+
+        for (int i = highest; i < v.size() - 1; i++)
+        {
+            if (v.at(i) > v.at(i + 1))
+            {
+                success = true;
+            }
+            else 
+            {
+                success = false;
+                break;
+            }
+        }
+
+    }
+
+
+    return success;
 }
 
 // Main function
 int main(){
     // Uncomment one of these lines and make sure you get the result at the right. 
     
-    std::vector<int> myvec = {1, 2, 5, 4, 3};  // Yes
-    // std::vector<int> myvec = {1, 1, 1, 1, 1};  // Yes
+    // std::vector<int> myvec = {1, 2, 5, 4, 3};  // Yes
+    std::vector<int> myvec = {1, 1, 1, 1, 1};  // Yes
     // std::vector<int> myvec = {3, 4, 5, 2, 2};  // Yes
     // std::vector<int> myvec = {3, 4, 5, 2, 4};  // No
     // std::vector<int> myvec = {1, 2, 3, 4, 5};  // Yes
